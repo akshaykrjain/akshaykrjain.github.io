@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Working Page!!</title>
+    <!-- Material Icons and Roboto font for Material Design -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #181c1f 0%, #232b36 100%);
+        color: #b2dfdb;
+        font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        text-align: center;
+        padding: 2rem 1rem;
+        border-radius: 18px;
+        background: rgba(30, 36, 40, 0.92);
+        box-shadow: 0 4px 32px 0 rgba(33, 150, 243, 0.1);
+        min-width: 320px;
+        max-width: 90vw;
+      }
+      h1 {
+        font-size: 2.1rem;
+        margin-bottom: 1.2rem;
+        letter-spacing: 1px;
+        font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+        font-weight: 700;
+        color: #90caf9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+      .motivation {
+        color: #b0bec5;
+        font-size: 1.08rem;
+        margin-bottom: 2rem;
+        letter-spacing: 0.5px;
+        opacity: 0.85;
+        font-style: italic;
+      }
+      .clock {
+        font-size: 2.7rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        margin-bottom: 2rem;
+        color: #b2dfdb;
+        background: rgba(33, 150, 243, 0.07);
+        border-radius: 12px;
+        padding: 1.2rem 0;
+        box-shadow: 0 2px 12px 0 rgba(33, 150, 243, 0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+      .material-icons {
+        font-size: 2rem;
+        vertical-align: middle;
+        color: #90caf9;
+        opacity: 0.7;
+      }
+      .workday {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .work-progress-bar-bg {
+        width: 100%;
+        height: 10px;
+        background: #263238;
+        border-radius: 5px;
+        margin: 0.5rem 0;
+        overflow: hidden;
+      }
+      .work-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #607d8b 0%, #90caf9 100%);
+        border-radius: 5px;
+        transition: width 0.3s;
+        box-shadow: 0 0 8px #90caf955;
+      }
+      .work-stats {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1rem;
+        color: #b0bec5;
+        opacity: 0.85;
+      }
+      .calendar {
+        margin-top: 2rem;
+        background: rgba(33, 150, 243, 0.07);
+        border-radius: 12px;
+        padding: 1.2rem;
+      }
+      .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.5rem;
+        text-align: center;
+      }
+      .calendar-day {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .calendar-date {
+        padding: 0.5rem;
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        line-height: 1rem;
+        margin: 0 auto;
+      }
+      .calendar-date.today {
+        background: #90caf9;
+        color: #263238;
+      }
+      .calendar-date.other-month {
+        opacity: 0.3;
+      }
+      .calendar-date.weekend {
+        color: #ff8a80;
+        opacity: 0.7;
+      }
+      .calendar-date.other-month.weekend {
+        opacity: 0.2;
+      }
+      @media (max-width: 480px) {
+        .container {
+          min-width: 0;
+        }
+        .clock {
+          font-size: 1.5rem;
+        }
+        h1 {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" style="transform: scale(1.05)">
+      <h1>
+        <span class="material-icons">terminal</span>
+        Terminal Work Mode
+        <span class="material-icons">cloud_sync</span>
+      </h1>
+      <div class="motivation">
+        "Discipline is the bridge between goals and accomplishment."
+      </div>
+      <div class="clock" id="clock">
+        <span class="material-icons">schedule</span>
+        <span id="clock-time">--:--:--</span>
+      </div>
+      <div class="workday">
+        <div class="work-stats">
+          <span id="work-completed">0h completed</span>
+          <span id="work-remaining">8h remaining</span>
+        </div>
+        <div class="work-progress-bar-bg">
+          <div
+            class="work-progress-bar"
+            id="work-progress-bar"
+            style="width: 0%"
+          ></div>
+        </div>
+        <div class="work-stats" style="justify-content: center">
+          <span id="work-percent">0% of workday</span>
+        </div>
+      </div>
+      <div class="calendar">
+        <div class="calendar-header">
+          <span class="material-icons">chevron_left</span>
+          <span id="calendar-month">January 2024</span>
+          <span class="material-icons">chevron_right</span>
+        </div>
+        <div class="calendar-grid" id="calendar-days">
+          <div class="calendar-day">Mo</div>
+          <div class="calendar-day">Tu</div>
+          <div class="calendar-day">We</div>
+          <div class="calendar-day">Th</div>
+          <div class="calendar-day">Fr</div>
+          <div class="calendar-day weekend">Sa</div>
+          <div class="calendar-day weekend">Su</div>
+        </div>
+        <div class="calendar-grid" id="calendar-dates"></div>
+      </div>
+    </div>
+    <script>
+      function pad(n) {
+        return n < 10 ? '0' + n : n;
+      }
+      function updateClocks() {
+        const now = new Date();
+        // Digital clock
+        document.getElementById('clock-time').textContent =
+          pad(now.getHours()) +
+          ':' +
+          pad(now.getMinutes()) +
+          ':' +
+          pad(now.getSeconds());
+
+        // Workday timer (8:00 to 16:00)
+        const workStart = new Date(now);
+        workStart.setHours(8, 0, 0, 0);
+        const workEnd = new Date(now);
+        workEnd.setHours(16, 0, 0, 0);
+
+        let completed = 0,
+          remaining = 8,
+          percent = 0;
+        if (now < workStart) {
+          completed = 0;
+          remaining = 8;
+          percent = 0;
+        } else if (now > workEnd) {
+          completed = 8;
+          remaining = 0;
+          percent = 100;
+        } else {
+          const msInWorkday = workEnd - workStart;
+          const msCompleted = now - workStart;
+          completed = msCompleted / (1000 * 60 * 60);
+          remaining = 8 - completed;
+          percent = (msCompleted / msInWorkday) * 100;
+        }
+        document.getElementById(
+          'work-completed'
+        ).textContent = `${completed.toFixed(2)}h completed`;
+        document.getElementById(
+          'work-remaining'
+        ).textContent = `${remaining.toFixed(2)}h remaining`;
+        document.getElementById(
+          'work-percent'
+        ).textContent = `${percent.toFixed(1)}% of workday`;
+        document.getElementById(
+          'work-progress-bar'
+        ).style.width = `${percent}%`;
+      }
+      function generateCalendar() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+
+        const monthNames = [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ];
+
+        document.getElementById(
+          'calendar-month'
+        ).textContent = `${monthNames[month]} ${year}`;
+        const calendarDates = document.getElementById('calendar-dates');
+        calendarDates.innerHTML = '';
+
+        // Convert Sunday (0) to Monday (1) based index
+        let firstDayIndex = firstDay.getDay() || 7;
+        firstDayIndex--;
+
+        // Add empty cells for days before first of month
+        for (let i = 0; i < firstDayIndex; i++) {
+          const lastMonthDate = new Date(year, month, -i);
+          const dateDiv = document.createElement('div');
+          dateDiv.className = 'calendar-date other-month';
+          // Add weekend class for Sat/Sun
+          if (lastMonthDate.getDay() === 0 || lastMonthDate.getDay() === 6) {
+            dateDiv.className += ' weekend';
+          }
+          dateDiv.textContent = lastMonthDate.getDate();
+          calendarDates.prepend(dateDiv);
+        }
+
+        // Add dates of current month
+        for (let i = 1; i <= lastDay.getDate(); i++) {
+          const currentDate = new Date(year, month, i);
+          const dateDiv = document.createElement('div');
+          dateDiv.className = 'calendar-date';
+          if (i === now.getDate()) dateDiv.className += ' today';
+          // Add weekend class for Sat/Sun
+          if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+            dateDiv.className += ' weekend';
+          }
+          dateDiv.textContent = i;
+          calendarDates.appendChild(dateDiv);
+        }
+      }
+      setInterval(updateClocks, 1000);
+      updateClocks();
+      generateCalendar();
+    </script>
+  </body>
+</html>

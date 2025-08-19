@@ -1,0 +1,194 @@
+/* Dark Tech Theme - Additional styles for enhanced website functionality */
+
+:root {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: #111111;
+    --card-bg: rgba(20, 20, 20, 0.95);
+    --accent-color: #00ff88;
+    --secondary-accent: #00d4ff;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --text-muted: #666666;
+    --border-color: rgba(0, 255, 136, 0.2);
+    --glow-color: rgba(0, 255, 136, 0.3);
+    --error-color: #ff4757;
+    --warning-color: #ffa502;
+}
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, var(--accent-color), var(--secondary-accent));
+    color: var(--primary-bg);
+    border: 1px solid var(--accent-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 0 20px var(--glow-color);
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+}
+
+.scroll-to-top:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px var(--glow-color);
+}
+
+/* Loading animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--accent-color);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Form validation styles */
+.field-error {
+    color: var(--error-color);
+    font-size: 0.85em;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.field-error i {
+    margin-right: 5px;
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid;
+    box-shadow: 0 0 20px;
+    z-index: 1001;
+    max-width: 300px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.notification.success {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px var(--glow-color);
+}
+
+.notification.error {
+    background: rgba(255, 71, 87, 0.1);
+    color: var(--error-color);
+    border-color: var(--error-color);
+    box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+}
+
+.notification.info {
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--secondary-accent);
+    border-color: var(--secondary-accent);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+/* Terminal cursor effect */
+.cursor::after {
+    content: '|';
+    animation: blink 1s infinite;
+    color: var(--accent-color);
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Matrix rain effect */
+.matrix-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.1;
+}
+
+/* Print styles */
+@media print {
+    .tech-bg,
+    .scroll-to-top,
+    .contact-form {
+        display: none !important;
+    }
+    
+    .section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .header,
+    .section {
+        background: white !important;
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+    }
+    
+    .header h1,
+    .section h2,
+    .job-title {
+        color: black !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --accent-color: #00ff00;
+        --secondary-accent: #00ffff;
+        --text-primary: #ffffff;
+        --border-color: rgba(0, 255, 0, 0.5);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .scroll-to-top {
+        transition: none;
+    }
+}
