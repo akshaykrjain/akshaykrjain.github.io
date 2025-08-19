@@ -1,4 +1,4 @@
-// Enhanced website functionality
+// Enhanced website functionality with analytics tracking
 document.addEventListener('DOMContentLoaded', function() {
     
     // Create and add scroll to top button
@@ -15,7 +15,107 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize contact form
     initContactForm();
+    
+    // Initialize analytics tracking
+    initAnalytics();
 });
+
+// Analytics tracking functions
+function initAnalytics() {
+    // Track page view
+    trackPageView();
+    
+    // Track scroll depth
+    trackScrollDepth();
+    
+    // Track external link clicks
+    trackExternalLinks();
+    
+    // Track skill interactions
+    trackSkillClicks();
+}
+
+function trackPageView() {
+    // Google Analytics tracking (if available)
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'page_view', {
+            'page_title': document.title,
+            'page_location': window.location.href
+        });
+    }
+    
+    // Simple visitor counter (localStorage)
+    const visits = localStorage.getItem('siteVisits') || 0;
+    const newVisits = parseInt(visits) + 1;
+    localStorage.setItem('siteVisits', newVisits);
+    localStorage.setItem('lastVisit', new Date().toISOString());
+}
+
+function trackScrollDepth() {
+    let maxScroll = 0;
+    let tracked25 = false, tracked50 = false, tracked75 = false, tracked100 = false;
+    
+    window.addEventListener('scroll', function() {
+        const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+        
+        if (scrollPercent > maxScroll) {
+            maxScroll = scrollPercent;
+            
+            // Track scroll milestones
+            if (scrollPercent >= 25 && !tracked25) {
+                tracked25 = true;
+                trackEvent('scroll_depth', '25_percent');
+            } else if (scrollPercent >= 50 && !tracked50) {
+                tracked50 = true;
+                trackEvent('scroll_depth', '50_percent');
+            } else if (scrollPercent >= 75 && !tracked75) {
+                tracked75 = true;
+                trackEvent('scroll_depth', '75_percent');
+            } else if (scrollPercent >= 100 && !tracked100) {
+                tracked100 = true;
+                trackEvent('scroll_depth', '100_percent');
+            }
+        }
+    });
+}
+
+function trackExternalLinks() {
+    document.querySelectorAll('a[href^="http"], a[href^="mailto:"], a[href^="tel:"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.href;
+            let linkType = 'external';
+            
+            if (href.includes('linkedin.com')) linkType = 'linkedin';
+            else if (href.includes('github.com')) linkType = 'github';
+            else if (href.startsWith('mailto:')) linkType = 'email';
+            else if (href.startsWith('tel:')) linkType = 'phone';
+            
+            trackEvent('link_click', linkType, href);
+        });
+    });
+}
+
+function trackSkillClicks() {
+    document.querySelectorAll('.skill-tag').forEach(tag => {
+        tag.addEventListener('click', function() {
+            trackEvent('skill_interaction', 'skill_click', this.textContent);
+        });
+    });
+}
+
+function trackEvent(action, category, label = '') {
+    // Google Analytics tracking
+    if (typeof gtag !== 'undefined') {
+        gtag('event', action, {
+            'event_category': category,
+            'event_label': label,
+            'value': 1
+        });
+    }
+    
+    // Console log for debugging (remove in production)
+    console.log('Analytics Event:', { action, category, label });
+}
 
 function createScrollToTopButton() {
     const scrollBtn = document.createElement('button');
@@ -122,6 +222,9 @@ function initContactForm() {
         const formData = new FormData(this);
         const data = Object.fromEntries(formData);
         
+        // Track form submission attempt
+        trackEvent('form_submit', 'contact_form', data.subject || 'general');
+        
         // Simulate form submission (replace with actual form handler)
         setTimeout(() => {
             // Create mailto link with form data
@@ -133,6 +236,9 @@ function initContactForm() {
                 `Subject: ${data.subject || 'General Inquiry'}\n\n` +
                 `Message:\n${data.message}`
             );
+            
+            // Track successful form processing
+            trackEvent('form_success', 'contact_form', data.subject || 'general');
             
             // Open default email client
             window.location.href = `mailto:akshayjain.ecb@gmail.com?subject=${subject}&body=${body}`;
@@ -153,6 +259,11 @@ function initContactForm() {
     inputs.forEach(input => {
         input.addEventListener('blur', validateField);
         input.addEventListener('input', clearValidationError);
+        
+        // Track form field interactions
+        input.addEventListener('focus', function() {
+            trackEvent('form_interaction', 'field_focus', this.name || this.id);
+        });
     });
 }
 
