@@ -1,6 +1,34 @@
 # Analytics & Monitoring Setup Guide
 
-This guide covers various ways to monitor usage and analytics for your GitHub Pages site.
+This guide covers the analytics and monitoring setup for akshaykrjain.github.io.
+
+## ✅ Current Analytics Setup
+
+### Google Analytics 4 (Active)
+- **Measurement ID**: G-E5TVCPFT5N
+- **Stream Name**: akshay-base
+- **Stream URL**: https://akshay-project-19477.firebaseapp.com
+- **Stream ID**: 3019249397
+- **Status**: ✅ Implemented and Active
+
+**Dashboard Access**: [Google Analytics Dashboard](https://analytics.google.com/analytics/web/#/p3019249397)
+
+## 📊 What's Being Tracked
+
+### Automatic Tracking:
+- **Page Views**: Every page visit
+- **Session Duration**: How long visitors stay
+- **Bounce Rate**: Single-page visits
+- **Traffic Sources**: Where visitors come from
+- **Geographic Data**: Visitor locations
+- **Device Information**: Mobile vs desktop usage
+
+### Custom Events:
+- **Scroll Depth**: 25%, 50%, 75%, 100% page scroll
+- **External Links**: LinkedIn, GitHub, email clicks
+- **Contact Form**: Submissions and field interactions
+- **Skill Interactions**: Clicks on skill tags
+- **Form Validation**: Success/error events
 
 ## 🔍 Analytics Options
 

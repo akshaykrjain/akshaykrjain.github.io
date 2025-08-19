@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Analytics tracking functions
 function initAnalytics() {
-    // Track page view
+    // Track page view with custom parameters
     trackPageView();
     
     // Track scroll depth
@@ -33,14 +33,29 @@ function initAnalytics() {
     
     // Track skill interactions
     trackSkillClicks();
+    
+    // Track professional sections
+    trackSectionViews();
+    
+    // Track time spent on site
+    trackTimeOnSite();
 }
 
 function trackPageView() {
-    // Google Analytics tracking (if available)
+    // Google Analytics tracking
     if (typeof gtag !== 'undefined') {
         gtag('event', 'page_view', {
             'page_title': document.title,
-            'page_location': window.location.href
+            'page_location': window.location.href,
+            'custom_parameter_1': 'portfolio_site',
+            'user_engagement': 'high_intent'
+        });
+        
+        // Track as a professional portfolio view
+        gtag('event', 'portfolio_view', {
+            'event_category': 'professional',
+            'event_label': 'devops_engineer',
+            'value': 1
         });
     }
     
@@ -49,6 +64,41 @@ function trackPageView() {
     const newVisits = parseInt(visits) + 1;
     localStorage.setItem('siteVisits', newVisits);
     localStorage.setItem('lastVisit', new Date().toISOString());
+    
+    // Track returning visitors
+    if (newVisits > 1) {
+        trackEvent('user_engagement', 'returning_visitor', `visit_${newVisits}`);
+    }
+}
+
+function trackSectionViews() {
+    const sections = document.querySelectorAll('.section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const sectionTitle = entry.target.querySelector('h2')?.textContent || 'unknown';
+                trackEvent('section_view', 'portfolio_section', sectionTitle.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    sections.forEach(section => observer.observe(section));
+}
+
+function trackTimeOnSite() {
+    const startTime = Date.now();
+    
+    // Track time milestones
+    setTimeout(() => trackEvent('time_on_site', '30_seconds'), 30000);
+    setTimeout(() => trackEvent('time_on_site', '1_minute'), 60000);
+    setTimeout(() => trackEvent('time_on_site', '2_minutes'), 120000);
+    setTimeout(() => trackEvent('time_on_site', '5_minutes'), 300000);
+    
+    // Track when user leaves
+    window.addEventListener('beforeunload', () => {
+        const timeSpent = Math.round((Date.now() - startTime) / 1000);
+        trackEvent('session_duration', 'total_time', `${timeSpent}_seconds`);
+    });
 }
 
 function trackScrollDepth() {
@@ -84,11 +134,31 @@ function trackExternalLinks() {
         link.addEventListener('click', function(e) {
             const href = this.href;
             let linkType = 'external';
+            let eventValue = 1;
             
-            if (href.includes('linkedin.com')) linkType = 'linkedin';
-            else if (href.includes('github.com')) linkType = 'github';
-            else if (href.startsWith('mailto:')) linkType = 'email';
-            else if (href.startsWith('tel:')) linkType = 'phone';
+            if (href.includes('linkedin.com')) {
+                linkType = 'linkedin_profile';
+                eventValue = 5; // Higher value for professional networking
+            } else if (href.includes('github.com')) {
+                linkType = 'github_profile';
+                eventValue = 4; // High value for technical portfolio
+            } else if (href.startsWith('mailto:')) {
+                linkType = 'email_contact';
+                eventValue = 10; // Highest value for direct contact
+            } else if (href.startsWith('tel:')) {
+                linkType = 'phone_contact';
+                eventValue = 8; // High value for phone contact
+            }
+            
+            // Track with professional context
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'professional_link_click', {
+                    'event_category': 'networking',
+                    'event_label': linkType,
+                    'value': eventValue,
+                    'custom_parameter_1': 'career_opportunity'
+                });
+            }
             
             trackEvent('link_click', linkType, href);
         });
@@ -98,7 +168,25 @@ function trackExternalLinks() {
 function trackSkillClicks() {
     document.querySelectorAll('.skill-tag').forEach(tag => {
         tag.addEventListener('click', function() {
-            trackEvent('skill_interaction', 'skill_click', this.textContent);
+            const skillName = this.textContent.trim();
+            
+            // Track skill interest with professional context
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'skill_interest', {
+                    'event_category': 'technical_skills',
+                    'event_label': skillName.toLowerCase(),
+                    'value': 2,
+                    'custom_parameter_1': 'skill_evaluation'
+                });
+            }
+            
+            trackEvent('skill_interaction', 'skill_click', skillName);
+        });
+        
+        // Also track hover events for skill interest
+        tag.addEventListener('mouseenter', function() {
+            const skillName = this.textContent.trim();
+            trackEvent('skill_hover', 'skill_interest', skillName);
         });
     });
 }
@@ -222,7 +310,16 @@ function initContactForm() {
         const formData = new FormData(this);
         const data = Object.fromEntries(formData);
         
-        // Track form submission attempt
+        // Track form submission attempt with professional context
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'lead_generation', {
+                'event_category': 'professional_inquiry',
+                'event_label': data.subject || 'general',
+                'value': 15, // High value for contact form submissions
+                'custom_parameter_1': 'potential_opportunity'
+            });
+        }
+        
         trackEvent('form_submit', 'contact_form', data.subject || 'general');
         
         // Simulate form submission (replace with actual form handler)
